@@ -11,6 +11,7 @@ const LoginStyles = StyleSheet.create({
   keyboardContainer: {
     backgroundColor: 'white',
     flex: 1,
+    minHeight: hp('100%'),
   },
   scrollContainer: {
     backgroundColor: 'white',
@@ -22,7 +23,7 @@ const LoginStyles = StyleSheet.create({
     backgroundColor: 'white',
   },
   imageContainer: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     height: hp('30%'),
     width: wp('85%'),
     marginTop: hp('5%'),
@@ -31,6 +32,7 @@ const LoginStyles = StyleSheet.create({
     flex: 1,
     width: null,
     height: null,
+    backgroundColor: 'white',
   },
   loginTitle: {
     marginTop: hp('3%'),
@@ -38,12 +40,14 @@ const LoginStyles = StyleSheet.create({
     color: 'purple',
     fontWeight: 'bold',
     fontFamily: 'Roboto-Bold',
+    backgroundColor: 'white',
   },
   inputCOntainer: {
     fontWeight: 'bold',
     marginTop: hp('6%'),
     fontSize: hp('2%'),
     color: 'black',
+    backgroundColor: 'white',
   },
   inputFieldContainer: {
     width: wp('80%'),
@@ -52,16 +56,29 @@ const LoginStyles = StyleSheet.create({
     padding: hp('1%'),
     borderRadius: hp('1%'),
     marginTop: hp('2%'),
+    backgroundColor: 'white',
   },
   buttonContainer: {
     marginTop: hp('4%'),
     width: wp('80%'),
   },
+  errorContainer: {
+    marginTop: hp('3%'),
+  },
+  errorText: {
+    color: 'red'
+  },
+
   otherOptionsContainer: {
     width: wp('80%'),
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: hp('5%'),
+    backgroundColor: 'white',
+  },
+  otherButton: {
+    color: 'purple',
+    backgroundColor: 'white',
   },
 });
 

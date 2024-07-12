@@ -50,7 +50,7 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
             />
           </View>
           <Text style={LoginStyles.loginTitle}>
-            <Text>SWIPE </Text>
+            <Text>SCROLL </Text>
             SHOP
           </Text>
 
@@ -82,12 +82,16 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
             />
           </View>
 
+          <View style={LoginStyles.errorContainer}>
+            <Text style={LoginStyles.errorText}>Error Message Goes Here</Text>
+          </View>
+
           <View style={LoginStyles.otherOptionsContainer}>
             <TouchableOpacity>
-              <Text>Sign Up</Text>
+              <Text style={LoginStyles.otherButton}>Sign Up</Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text>Forgot Password?</Text>
+              <Text style={LoginStyles.otherButton}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
