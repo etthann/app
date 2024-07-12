@@ -10,6 +10,7 @@ import {
   ScrollView,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import loginImage from '../../photos/loginPhoto.png';
@@ -30,8 +31,6 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
   const [userName, setUserName] = React.useState();
   const [password, setPassword] = React.useState();
   const [error, setError] = React.useState('');
-
-  
 
   return (
     <KeyboardAvoidingView
@@ -84,8 +83,12 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
           </View>
 
           <View style={LoginStyles.otherOptionsContainer}>
-            <Text>Sign Up</Text>
-            <Text>Forgot Password?</Text>
+            <TouchableOpacity>
+              <Text>Sign Up</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>Forgot Password?</Text>
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
       </ScrollView>
