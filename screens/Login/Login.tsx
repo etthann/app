@@ -33,6 +33,28 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
   const [password, setPassword] = React.useState();
   const [error, setError] = React.useState('');
 
+  const login = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/login', {
+        userName: userName,
+        password: password,
+      });
+      // Assuming the server sends back a 200 status code for a successful login
+      if (response.status === 200) {
+        // Navigate to another screen, e.g., 'Dashboard'
+        navigation.navigate('Home');
+      } else {
+        // Handle any other status codes as login failures
+        setError('Login failed. Please try again.');
+      }
+    } catch (catchError) {
+      // If an error occurs during the request (e.g., server is down or response status is 4xx/5xx)
+      console.log(catchError);
+      // Update the state to display an error message
+      setError('An error occurred. Please try again later.');
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={LoginStyles.keyboardContainer}
@@ -58,7 +80,7 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
           <View style={LoginStyles.inputCOntainer}>
             <TextInput
               style={LoginStyles.inputFieldContainer}
-              onChangeText={() => {
+              onChangeText={() => {x
                 setUserName;
               }}
               value={userName}
@@ -78,13 +100,13 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
               title="Login"
               accessibilityLabel="Click Here to Login"
               onPress={() => {
-                navigation.navigate('Home');
+                login();
               }}
             />
           </View>
 
           <View style={LoginStyles.errorContainer}>
-            <Text style={LoginStyles.errorText}>Error Message Goes Here</Text>
+            <Text style={LoginStyles.errorText}>{error}</Text>
           </View>
 
           <View style={LoginStyles.otherOptionsContainer}>
