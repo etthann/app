@@ -14,21 +14,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import loginImage from '../../photos/loginPhoto.png';
 import {KeyboardAvoidingView} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import axios from 'axios';
+import navProps from '../../props/navProp';
 
-interface LoginProps {
-  navigation: {
-    navigate: (routeName: string, params?: any) => void;
-  };
-}
-
-const Login: React.FC<LoginProps> = ({navigation}) => {
+const Login: React.FC<navProps> = ({navigation}) => {
   const [userName, setUserName] = React.useState();
   const [password, setPassword] = React.useState();
   const [error, setError] = React.useState('');
@@ -67,7 +61,7 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
         <SafeAreaView style={LoginStyles.container}>
           <View style={LoginStyles.imageContainer}>
             <Image
-              source={loginImage}
+              source={require('../../photos/loginPhoto.png')}
               resizeMode="contain"
               style={LoginStyles.image}
             />
@@ -80,7 +74,7 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
           <View style={LoginStyles.inputCOntainer}>
             <TextInput
               style={LoginStyles.inputFieldContainer}
-              onChangeText={() => {x
+              onChangeText={() => {
                 setUserName;
               }}
               value={userName}

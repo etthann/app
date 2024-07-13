@@ -1,15 +1,29 @@
-from flask import Flask
+from flask import Flask, jsonify
 import os
 from dotenv import load_dotenv
-import AuthUser
+from Auth.Auth import AuthUser
 from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 
 load_dotenv()
 
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_SECURE'] = True  # Use HTTPS
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True  # Enable CSRF protection
 
-# Database configuration
+jwt = JWTManager(app)
+
+bcrypt = Bcrypt(app)
+bcrypt.init_app(app)
+
+db = SQLAlchemy()
+db.init_app(app)
+
+
 db_username = os.getenv('DB_USERNAME')
 db_password = os.getenv('DB_PASSWORD')
 db_host = os.getenv('DB_HOST')
@@ -49,8 +63,17 @@ def login():
     # Create a response object
     response = make_response({'message': 'Login successful'}, 200)
     # Set the token in an HTTP-only cookie
-    response.set_cookie('auth_token', token, httponly=True, secure=True)
+    set_access_cookies(response, token)
     return response
+
+@app.route("/shop", methods=['POST'])
+@jwt_required()
+def shop():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user_identity).first()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    return jsonify({'message': f'Welcome {current_user}! You can shop now!'})
 
 
 if __name__ == "__main__":
