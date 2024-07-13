@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable react/self-closing-comp */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import * as React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LoginStyles from './LoginStyles';
@@ -88,7 +89,13 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
 
           <View style={LoginStyles.otherOptionsContainer}>
             <TouchableOpacity>
-              <Text style={LoginStyles.otherButton}>Sign Up</Text>
+              <Text
+                style={LoginStyles.otherButton}
+                onPress={() => {
+                  navigation.navigate('Register');
+                }}>
+                Register
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity>
               <Text style={LoginStyles.otherButton}>Forgot Password?</Text>

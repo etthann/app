@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // styles.ts
 import {StyleSheet} from 'react-native';
 
@@ -5,7 +6,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import Home from '../Home/Home';
 
 const LoginStyles = StyleSheet.create({
   keyboardContainer: {
@@ -66,7 +66,7 @@ const LoginStyles = StyleSheet.create({
     marginTop: hp('3%'),
   },
   errorText: {
-    color: 'red'
+    color: 'red',
   },
 
   otherOptionsContainer: {

@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './screens/Home/Home';
 import Login from './screens/Login/Login';
+import Register from './screens/SignUp/Register';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,8 @@ const App: React.FC = () => {
           component={Home}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="Register" component={Register} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
