@@ -10,7 +10,7 @@ import {
 const RegisterStyles = StyleSheet.create({
   keyboardContainer: {
     flex: 1,
-    minHeight: hp('100%'),
+    backgroundColor: 'white',
   },
   scrollContainer: {
     backgroundColor: 'white',

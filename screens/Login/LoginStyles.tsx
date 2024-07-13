@@ -11,7 +11,6 @@ const LoginStyles = StyleSheet.create({
   keyboardContainer: {
     backgroundColor: 'white',
     flex: 1,
-    minHeight: hp('100%'),
   },
   scrollContainer: {
     backgroundColor: 'white',

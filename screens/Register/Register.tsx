@@ -40,19 +40,16 @@ const Register: React.FC<navProps> = ({navigation}) => {
 
   const register = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/login', {
+      const response = await axios.post('http://localhost:3000/register', {
         userName: userName,
         email: email,
         confirmPassword: confirmPassword,
         password: password,
       });
-      // Assuming the server sends back a 200 status code for a successful login
       if (response.status === 200) {
-        // Navigate to another screen, e.g., 'Dashboard'
         navigation.navigate('Home');
       } else {
-        // Handle any other status codes as login failures
-        setError('Login failed. Please try again.');
+        setError('Register failed. Please try again.');
       }
     } catch (catchError) {
       // If an error occurs during the request (e.g., server is down or response status is 4xx/5xx)
@@ -66,7 +63,7 @@ const Register: React.FC<navProps> = ({navigation}) => {
     <KeyboardAvoidingView
       style={RegisterStyles.keyboardContainer}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : hp('5%')}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : hp('12%')}
       enabled>
       <ScrollView
         keyboardShouldPersistTaps="handled"

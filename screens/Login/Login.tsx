@@ -52,8 +52,8 @@ const Login: React.FC<navProps> = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       style={LoginStyles.keyboardContainer}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : hp('5%')}
+      behavior={Platform.OS === 'ios' ? 'height' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : hp('4%')}
       enabled>
       <ScrollView
         keyboardShouldPersistTaps="handled"
