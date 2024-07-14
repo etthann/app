@@ -27,26 +27,20 @@ const Login: React.FC<navProps> = ({navigation}) => {
   const [password, setPassword] = React.useState();
   const [error, setError] = React.useState('');
 
-  const login = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/login', {
-        userName: userName,
+  const handleLogin = () => {
+    console.log('Login Request Sent');
+    axios
+      .post('http://10.0.2.2:5000/login', {
+        username: userName,
         password: password,
+      })
+      .then(function (response) {
+        // Accessing the message from the response data
+        console.log(response.data.message);
+      })
+      .catch(function (errors) {
+        console.log(errors);
       });
-      // Assuming the server sends back a 200 status code for a successful login
-      if (response.status === 200) {
-        // Navigate to another screen, e.g., 'Dashboard'
-        navigation.navigate('Home');
-      } else {
-        // Handle any other status codes as login failures
-        setError('Login failed. Please try again.');
-      }
-    } catch (catchError) {
-      // If an error occurs during the request (e.g., server is down or response status is 4xx/5xx)
-      console.log(catchError);
-      // Update the state to display an error message
-      setError('An error occurred. Please try again later.');
-    }
   };
 
   return (
@@ -81,6 +75,7 @@ const Login: React.FC<navProps> = ({navigation}) => {
               placeholder="Username"
             />
             <TextInput
+              secureTextEntry={true}
               style={LoginStyles.inputFieldContainer}
               onChangeText={() => {
                 setPassword;
@@ -94,7 +89,7 @@ const Login: React.FC<navProps> = ({navigation}) => {
               title="Login"
               accessibilityLabel="Click Here to Login"
               onPress={() => {
-                login();
+                handleLogin();
               }}
             />
           </View>

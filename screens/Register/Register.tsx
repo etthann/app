@@ -28,19 +28,35 @@ const Register: React.FC<navProps> = ({navigation}) => {
   const [error, setError] = React.useState('');
 
   const inputFields = [
-    {placeholder: 'Username', value: userName, onChangeText: setUserName},
-    {placeholder: 'Email', value: email, onChangeText: setEmail},
-    {placeholder: 'Password', value: password, onChangeText: setPassword},
+    {
+      placeholder: 'Username',
+      value: userName,
+      onChangeText: setUserName,
+      secureTextEntry: false,
+    },
+    {
+      placeholder: 'Email',
+      value: email,
+      onChangeText: setEmail,
+      secureTextEntry: false,
+    },
+    {
+      placeholder: 'Password',
+      value: password,
+      onChangeText: setPassword,
+      secureTextEntry: true,
+    },
     {
       placeholder: 'Confirm Password',
       value: confirmPassword,
       onChangeText: setConfirmPassword,
+      secureTextEntry: true,
     },
   ];
 
   const register = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/register', {
+      const response = await axios.post('http://localhost:5000/register', {
         userName: userName,
         email: email,
         confirmPassword: confirmPassword,
@@ -80,6 +96,7 @@ const Register: React.FC<navProps> = ({navigation}) => {
           <View style={RegisterStyles.inputCOntainer}>
             {inputFields.map((field, index) => (
               <TextInput
+                secureTextEntry={field.secureTextEntry}
                 key={index}
                 style={RegisterStyles.inputFieldContainer}
                 onChangeText={text => field.onChangeText(text)}
