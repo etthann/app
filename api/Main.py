@@ -22,6 +22,22 @@ def register():
     email = data['email']
     confirm_password = data['confirmPassword']
     
+    username_regex = r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).*$'
+
+    validations = {
+        'Invalid email address': not re.match(r"[^@]+@[^@]+\.[^@]+", email),
+        'Passwords do not match': password != confirm_password,
+        'Password must be at least 8 characters': len(password) < 8,
+        'Username must be at least 4 characters': len(username) < 4,
+        'Username must be alphanumeric, contain an uppercase letter and at least one special character': not re.match(username_regex, username),
+        'Username already exists': User.query.filter_by(username=username).first() is not None,
+        'Email already exists': User.query.filter_by(email=email).first() is not None
+    }
+
+    for message, condition in validations.items():
+        if condition:
+            return jsonify({'message': key})
+
     if password.decode('utf-8') != confirm_password:
         return jsonify({'message': 'Passwords do not match'})
     

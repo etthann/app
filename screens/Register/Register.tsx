@@ -66,7 +66,10 @@ const Register: React.FC<navProps> = ({navigation}) => {
       // Placeholder for handling success response
       // For example, navigate to the login page or show a success message
     } catch (e) {
-      console.log('Registration error:', (e as any).response ? (e as any).response.data : e);
+      console.log(
+        'Registration error:',
+        (e as any).response ? (e as any).response.data : e,
+      );
       // Handle error (e.g., show error message to the user)
     }
   };
