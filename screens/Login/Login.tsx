@@ -14,30 +14,40 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import loginImage from '../../photos/loginPhoto.png';
 import {KeyboardAvoidingView} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import axios from 'axios';
+import navProps from '../../props/navProp';
 
-interface LoginProps {
-  navigation: {
-    navigate: (routeName: string, params?: any) => void;
-  };
-}
-
-const Login: React.FC<LoginProps> = ({navigation}) => {
+const Login: React.FC<navProps> = ({navigation}) => {
   const [userName, setUserName] = React.useState();
   const [password, setPassword] = React.useState();
   const [error, setError] = React.useState('');
 
+  const handleLogin = () => {
+    console.log('Login Request Sent');
+    axios
+      .post('http://10.0.2.2:5000/login', {
+        username: userName,
+        password: password,
+      })
+      .then(function (response) {
+        // Accessing the message from the response data
+        console.log(response.data.message);
+      })
+      .catch(function (errors) {
+        console.log(errors);
+      });
+  };
+
   return (
     <KeyboardAvoidingView
       style={LoginStyles.keyboardContainer}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : hp('5%')}
+      behavior={Platform.OS === 'ios' ? 'height' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : hp('4%')}
       enabled>
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -45,7 +55,7 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
         <SafeAreaView style={LoginStyles.container}>
           <View style={LoginStyles.imageContainer}>
             <Image
-              source={loginImage}
+              source={require('../../photos/loginPhoto.png')}
               resizeMode="contain"
               style={LoginStyles.image}
             />
@@ -65,6 +75,7 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
               placeholder="Username"
             />
             <TextInput
+              secureTextEntry={true}
               style={LoginStyles.inputFieldContainer}
               onChangeText={() => {
                 setPassword;
@@ -78,13 +89,13 @@ const Login: React.FC<LoginProps> = ({navigation}) => {
               title="Login"
               accessibilityLabel="Click Here to Login"
               onPress={() => {
-                navigation.navigate('Home');
+                handleLogin();
               }}
             />
           </View>
 
           <View style={LoginStyles.errorContainer}>
-            <Text style={LoginStyles.errorText}>Error Message Goes Here</Text>
+            <Text style={LoginStyles.errorText}>{error}</Text>
           </View>
 
           <View style={LoginStyles.otherOptionsContainer}>

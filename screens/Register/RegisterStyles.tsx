@@ -7,10 +7,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const LoginStyles = StyleSheet.create({
+const RegisterStyles = StyleSheet.create({
   keyboardContainer: {
-    backgroundColor: 'white',
     flex: 1,
+    backgroundColor: 'white',
   },
   scrollContainer: {
     backgroundColor: 'white',
@@ -22,19 +22,16 @@ const LoginStyles = StyleSheet.create({
     backgroundColor: 'white',
   },
   imageContainer: {
-    backgroundColor: 'white',
     height: hp('30%'),
     width: wp('85%'),
-    marginTop: hp('5%'),
   },
   image: {
     flex: 1,
     width: null,
     height: null,
-    backgroundColor: 'white',
   },
-  loginTitle: {
-    marginTop: hp('3%'),
+  registerTitle: {
+    marginTop: hp('1%'),
     fontSize: hp('5%'),
     color: 'purple',
     fontWeight: 'bold',
@@ -43,7 +40,7 @@ const LoginStyles = StyleSheet.create({
   },
   inputCOntainer: {
     fontWeight: 'bold',
-    marginTop: hp('6%'),
+    marginTop: hp('2%'),
     fontSize: hp('2%'),
     color: 'black',
     backgroundColor: 'white',
@@ -67,18 +64,6 @@ const LoginStyles = StyleSheet.create({
   errorText: {
     color: 'red',
   },
-
-  otherOptionsContainer: {
-    width: wp('80%'),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: hp('5%'),
-    backgroundColor: 'white',
-  },
-  otherButton: {
-    color: 'purple',
-    backgroundColor: 'white',
-  },
 });
 
-export default LoginStyles;
+export default RegisterStyles;
