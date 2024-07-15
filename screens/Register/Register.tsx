@@ -56,22 +56,18 @@ const Register: React.FC<navProps> = ({navigation}) => {
 
   const register = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/register', {
-        userName: userName,
+      const response = await axios.post('http://10.0.2.2:5000/register', {
+        username: userName,
         email: email,
-        confirmPassword: confirmPassword,
         password: password,
+        confirmPassword: confirmPassword,
       });
-      if (response.status === 200) {
-        navigation.navigate('Home');
-      } else {
-        setError('Register failed. Please try again.');
-      }
-    } catch (catchError) {
-      // If an error occurs during the request (e.g., server is down or response status is 4xx/5xx)
-      console.log(catchError);
-      // Update the state to display an error message
-      setError('An error occurred. Please try again later.');
+      console.log('Server response:', response.data);
+      // Placeholder for handling success response
+      // For example, navigate to the login page or show a success message
+    } catch (e) {
+      console.log('Registration error:', (e as any).response ? (e as any).response.data : e);
+      // Handle error (e.g., show error message to the user)
     }
   };
 
