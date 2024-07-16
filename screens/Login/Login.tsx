@@ -23,24 +23,27 @@ import axios from 'axios';
 import navProps from '../../props/navProp';
 
 const Login: React.FC<navProps> = ({navigation}) => {
-  const [userName, setUserName] = React.useState();
-  const [password, setPassword] = React.useState();
+  const [userName, setUserName] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
   const [error, setError] = React.useState('');
 
-  const handleLogin = () => {
-    console.log('Login Request Sent');
-    axios
-      .post('http://10.0.2.2:5000/login', {
+  const login = async () => {
+    try {
+      console.log('Logging in with:', userName, password);
+      const response = await axios.post('http://10.0.2.2:5000/login', {
         username: userName,
         password: password,
-      })
-      .then(function (response) {
-        // Accessing the message from the response data
-        console.log(response.data.message);
-      })
-      .catch(function (errors) {
-        console.log(errors);
       });
+      console.log('Server response:', response.data);
+      // Placeholder for handling success response
+      // For example, navigate to the login page or show a success message
+    } catch (e) {
+      console.log(
+        'Registration error:',
+        (e as any).response ? (e as any).response.data : e,
+      );
+      // Handle error (e.g., show error message to the user)
+    }
   };
 
   return (
@@ -68,8 +71,8 @@ const Login: React.FC<navProps> = ({navigation}) => {
           <View style={LoginStyles.inputCOntainer}>
             <TextInput
               style={LoginStyles.inputFieldContainer}
-              onChangeText={() => {
-                setUserName;
+              onChangeText={username => {
+                setUserName(username);
               }}
               value={userName}
               placeholder="Username"
@@ -77,8 +80,8 @@ const Login: React.FC<navProps> = ({navigation}) => {
             <TextInput
               secureTextEntry={true}
               style={LoginStyles.inputFieldContainer}
-              onChangeText={() => {
-                setPassword;
+              onChangeText={password => {
+                setPassword(password);
               }}
               value={password}
               placeholder="Password"
@@ -89,7 +92,7 @@ const Login: React.FC<navProps> = ({navigation}) => {
               title="Login"
               accessibilityLabel="Click Here to Login"
               onPress={() => {
-                handleLogin();
+                login();
               }}
             />
           </View>

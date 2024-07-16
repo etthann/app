@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from flask_cors import CORS
 import bcrypt
+from Auth.Authentication import Authentication as auth
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -16,46 +18,29 @@ def index():
 
 @app.route('/register', methods=['POST'])
 def register():
+    return auth.register_user()
+
+@app.route('/login', methods=['POST'])
+def login():
     data = request.json
+    # Check if both 'username' and 'password' keys exist in the request data
+    if 'username' not in data or 'password' not in data:
+        return jsonify({'message': 'Missing username or password'}), 400
+
     username = data['username']
     password = data['password'].encode('utf-8')
-    email = data['email']
-    confirm_password = data['confirmPassword']
-    
-    username_regex = r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).*$'
 
-    validations = {
-        'Invalid email address': not re.match(r"[^@]+@[^@]+\.[^@]+", email),
-        'Passwords do not match': password != confirm_password,
-        'Password must be at least 8 characters': len(password) < 8,
-        'Username must be at least 4 characters': len(username) < 4,
-        'Username must be alphanumeric, contain an uppercase letter and at least one special character': not re.match(username_regex, username),
-        'Username already exists': User.query.filter_by(username=username).first() is not None,
-        'Email already exists': User.query.filter_by(email=email).first() is not None
-    }
-
-    for message, condition in validations.items():
-        if condition:
-            return jsonify({'message': key})
-
-    if password.decode('utf-8') != confirm_password:
-        return jsonify({'message': 'Passwords do not match'})
+    if username is None or password is None or username == '' or password == '':
+        return jsonify({'message': 'Missing username or password'}), 400
     
     user = users.find_one({'username': username})
-    if user:
-        return jsonify({'message': 'User already exists'})
+    if user is None:
+        return jsonify({'message': 'User does not exist'}), 401
     
-    # Hash the password
-    hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-    
-    # Store the user with the hashed password
-    users.insert_one({
-        'username': username,
-        'password': hashed_password,
-        'email': email
-    })
-    
-    return jsonify({'message': 'User created successfully'}), 200
+    if not bcrypt.checkpw(password, user['password']):
+        return jsonify({'message': 'Invalid password'}),
+
+    return jsonify("login successful")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
