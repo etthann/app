@@ -1,3 +1,5 @@
+from flask import Flask, request, jsonify
+import bcrypt
 
 class Authentication():
 
@@ -55,17 +57,23 @@ class Authentication():
             'email': email
         })
 
-    # @staticmethod
-    # def login_user():
-    #     data = request.json
-    #     username = data['username']
-    #     password = data['password'].encode('utf-8')
-    #     user = users.find_one({'username': username})
+    @staticmethod
+    def login_user(users):
+        data = request.json
+        if 'username' not in data or 'password' not in data:
+            return jsonify({'message': 'Missing username or password'}), 400
 
-    #     if user is None:
-    #         return jsonify({'message': 'User does not exist'}), 401
+        username = data['username']
+        password = data['password'].encode('utf-8')
+
+        if username is None or password is None or username == '' or password == '':
+            return jsonify({'message': 'Missing username or password'}), 400
         
-    #     if not bcrypt.checkpw(password, user['password']):
-    #         return jsonify({'message': 'Invalid password'}), 401
+        user = users.find_one({'username': username})
+        if user is None:
+            return jsonify({'message': 'User does not exist'}), 401
         
-    #     return jsonify({'message': 'Login successful'}), 200
+        if not bcrypt.checkpw(password, user['password']):
+            return jsonify({'message': 'Invalid password'}),
+
+        return jsonify({'message': 'Logged in successfully'}), 200

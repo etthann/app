@@ -29,14 +29,14 @@ const Login: React.FC<navProps> = ({navigation}) => {
 
   const login = async () => {
     try {
-      console.log('Logging in with:', userName, password);
       const response = await axios.post('http://10.0.2.2:5000/login', {
         username: userName,
         password: password,
       });
-      console.log('Server response:', response.data);
-      // Placeholder for handling success response
-      // For example, navigate to the login page or show a success message
+
+      if (response.status === 200) {
+        navigation.navigate('Home');
+      }
     } catch (e) {
       console.log(
         'Registration error:',
