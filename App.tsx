@@ -12,13 +12,13 @@ const App: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Login"
-          component={Login}
+          name="Home"
+          component={Home}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name="Login"
+          component={Login}
           options={{headerShown: false}}
         />
         <Stack.Screen name="Register" component={Register} />
