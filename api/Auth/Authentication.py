@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 import bcrypt
+import re
+
 
 class Authentication():
 
@@ -18,7 +20,7 @@ class Authentication():
         if message is not None:
             return message
 
-        register_user_to_db()
+        Authentication.register_user_to_db(username, hashed_password, email)
 
         return jsonify({'message': 'User created successfully'}), 200
 
@@ -31,8 +33,8 @@ class Authentication():
             'Password must be at least 8 characters': len(password) < 8,
             'Username must be at least 4 characters': len(username) < 4,
             'Username must be alphanumeric, contain an uppercase letter and at least one special character': not re.match(username_regex, username),
-            'Username already exists': User.query.filter_by(username=username).first() is not None,
-            'Email already exists': User.query.filter_by(email=email).first() is not None
+            'Username already exists': users.query.filter_by(username=username).first() is not None,
+            'Email already exists': users.query.filter_by(email=email).first() is not None
         }
 
         for message, condition in validations.items():
@@ -43,7 +45,8 @@ class Authentication():
             if password.decode('utf-8') != confirm_password:
                 return jsonify({'message': 'Passwords do not match'})
         
-        user = users.find_one({'username': username})
+        users.find_one({'username': username})
+
         if register:
             return jsonify({'message': 'User already exists'})
         return None
@@ -77,3 +80,5 @@ class Authentication():
             return jsonify({'message': 'Invalid password'}),
 
         return jsonify({'message': 'Logged in successfully'}), 200
+    
+    

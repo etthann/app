@@ -80,8 +80,8 @@ const Login: React.FC<navProps> = ({navigation}) => {
             <TextInput
               secureTextEntry={true}
               style={LoginStyles.inputFieldContainer}
-              onChangeText={password => {
-                setPassword(password);
+              onChangeText={pass => {
+                setPassword(pass);
               }}
               value={password}
               placeholder="Password"
