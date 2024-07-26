@@ -111,7 +111,9 @@ const Login: React.FC<navProps> = ({navigation}) => {
                 Register
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('ForgotPassword');
+            }}>
               <Text style={LoginStyles.otherButton}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>

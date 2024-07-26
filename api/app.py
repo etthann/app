@@ -19,7 +19,7 @@ def index():
 
 @app.route('/register', methods=['POST'])
 def register():
-    return auth.register_user()
+    return auth.register_user(users)
 
 @app.route('/login', methods=['POST'])
 def login():
