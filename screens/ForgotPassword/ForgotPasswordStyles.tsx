@@ -7,7 +7,6 @@ import {
 
 const ForgotPasswordStyles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     flex: 1,
     width: wp('100%'),
     height: hp('100%'),
@@ -23,6 +22,18 @@ const ForgotPasswordStyles = StyleSheet.create({
     padding: hp('1%'),
     borderRadius: hp('1%'),
     marginTop: hp('2%'),
+  },
+  button: {
+    width: wp('80%'),
+    height: hp('6%'),
+    marginTop: hp('2%'),
+    borderRadius: hp('1%'),
+  },
+  imageContainer: {
+    width: wp('80%'),
+    height: hp('30%'),
+    resizeMode: 'contain',
+    marginBottom: hp('2%'),
   },
 });
 

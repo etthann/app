@@ -31,7 +31,9 @@ const Profile: React.FC<navProps> = ({navigation}) => {
           My Profile
         </Text>
       </View>
-      <TouchableOpacity style={ProfileStyles.avatarContainer}>
+      <TouchableOpacity
+        style={ProfileStyles.avatarContainer}
+        onPress={() => {}}>
         <Image
           source={{uri: 'https://via.placeholder.com/150'}}
           style={ProfileStyles.avatar}
