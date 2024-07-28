@@ -2,64 +2,60 @@ from flask import Flask, request, jsonify
 import bcrypt
 import re
 
-
-class Authentication():
-
-    @staticmethod
-    def register_user():
-        data = request.json
-        username = data['username']
-        password = data['password'].encode('utf-8')
-        email = data['email']
-        confirm_password = data['confirmPassword']
-        # Hash the password
-        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-        
-        message = Authentication.validate_request_data()
-
-        if message is not None:
-            return message
-
-        Authentication.register_user_to_db(username, hashed_password, email)
-
-        return jsonify({'message': 'User created successfully'}), 200
+class Authentication:
 
     @staticmethod
-    def validate_request_data(username,password,email = None,confirm_password = None, register = True):
+    def register_user(users):
+        try:
+            data = request.json
+            username = data['username']
+            password = data['password'].encode('utf-8')
+            email = data['email']
+            confirm_password = data['confirmPassword']
+
+            # Validate the request data
+            validation_message = Authentication.validate_request_data(users, username, password, email, confirm_password)
+            if validation_message is not None:
+                return validation_message
+
+            # Hash the password
+            hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+
+            # Store the user with the hashed password
+            users.insert_one({
+                'username': username,
+                'password': hashed_password,
+                'email': email
+            })
+
+            return jsonify({'message': 'User created successfully'}), 200
+        except Exception as e:
+            return jsonify({'message': 'An error occurred'}), 500
+
+    @staticmethod
+    def validate_request_data(users, username, password, email=None, confirm_password=None):
         username_regex = r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).*$'
         validations = {
-            'Invalid email address': not re.match(r"[^@]+@[^@]+\.[^@]+", email),
+            'Email is required': not email,
+            'Username is required': not username,
+            'Password is required': not password,
+            'Confirm password is required': not confirm_password,
+            'Invalid email address': email and not re.match(r"[^@]+@[^@]+\.[^@]+", email),
             'Passwords do not match': password != confirm_password,
-            'Password must be at least 8 characters': len(password) < 8,
-            'Username must be at least 4 characters': len(username) < 4,
-            'Username must be alphanumeric, contain an uppercase letter and at least one special character': not re.match(username_regex, username),
-            'Username already exists': users.query.filter_by(username=username).first() is not None,
-            'Email already exists': users.query.filter_by(email=email).first() is not None
+            'Password must be at least 8 characters': password and len(password) < 8,
+            'Username must be at least 4 characters': username and len(username) < 4,
+            'Username must be alphanumeric, contain an uppercase letter and at least one special character': username and not re.match(username_regex, username),
+            'Username already exists': username and users.find_one({'username': username}) is not None,
+            'Email already exists': email and users.find_one({'email': email}) is not None
         }
 
         for message, condition in validations.items():
             if condition:
-                return jsonify({'message': message})
+                return jsonify({'message': message}), 400
 
-        if confirm_password is not None:
-            if password.decode('utf-8') != confirm_password:
-                return jsonify({'message': 'Passwords do not match'})
-        
-        users.find_one({'username': username})
-
-        if register:
-            return jsonify({'message': 'User already exists'})
         return None
-
-
-    @staticmethod
-    def register_user_to_db(username, hashed_password, email):
-        users.insert_one({
-            'username': username,
-            'password': hashed_password,
-            'email': email
-        })
-
+    
+    
     @staticmethod
     def login_user(users):
         data = request.json

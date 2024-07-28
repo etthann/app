@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-catch-shadow */
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Button,
@@ -25,7 +27,7 @@ const Register: React.FC<navProps> = ({navigation}) => {
   const [password, setPassword] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState<any>(null);
 
   const inputFields = [
     {
@@ -54,23 +56,56 @@ const Register: React.FC<navProps> = ({navigation}) => {
     },
   ];
 
-  const register = async () => {
+  const validateForm = () => {
+    const validations = [
+      {
+        condition: [userName, password, email, confirmPassword].some(
+          field => !field,
+        ),
+        message: 'Please fill out all fields',
+      },
+      {
+        condition: userName.length < 3,
+        message: 'Username must be at least 3 characters',
+      },
+      {
+        condition: password !== confirmPassword,
+        message: 'Passwords do not match',
+      },
+      {
+        condition: password.length < 8,
+        message: 'Password must be at least 8 characters',
+      },
+      {
+        condition: !email.includes('@') || !email.includes('.'),
+        message: 'Invalid email',
+      },
+    ];
+
+    return !validations.find(
+      ({condition, message}) => condition && (setError(message), true),
+    );
+  };
+
+  const handleRegister = async () => {
     try {
+      if (!validateForm()) {
+        return;
+      }
+
       const response = await axios.post('http://10.0.2.2:5000/register', {
         username: userName,
-        email: email,
         password: password,
+        email: email,
         confirmPassword: confirmPassword,
       });
-      console.log('Server response:', response.data);
-      // Placeholder for handling success response
-      // For example, navigate to the login page or show a success message
-    } catch (e) {
-      console.log(
-        'Registration error:',
-        (e as any).response ? (e as any).response.data : e,
-      );
-      // Handle error (e.g., show error message to the user)
+
+      if (response.status === 200) {
+        navigation.navigate('Home');
+      }
+      setError(response.data.message);
+    } catch (error) {
+      setError((error as any).response.data.message);
     }
   };
 
@@ -112,7 +147,7 @@ const Register: React.FC<navProps> = ({navigation}) => {
               title="Register"
               accessibilityLabel="Click Here to Register"
               onPress={() => {
-                register();
+                handleRegister();
               }}
             />
           </View>
