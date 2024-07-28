@@ -29,20 +29,34 @@ const categories = [
 const renderItem = ({item}: {item: any}) => (
   <TouchableOpacity
     style={SearchStyles.categoryBox}
-    onPress={() => console.log(`Navigate to ${item.name}`)} // Replace with your navigation logic
-  >
+    onPress={() => console.log(`Navigate to ${item.name}`)}>
     <Text style={SearchStyles.categoryText}>{item.name}</Text>
   </TouchableOpacity>
 );
 
 const SearchScreen = () => {
   const [search, setSearch] = React.useState('');
+  const [page, setPage] = React.useState(1);
+  const itemsPerPage = 5;
 
   const updateSearch = (searchCategory: React.SetStateAction<string>) => {
     setSearch(searchCategory);
+    setPage(1);
   };
 
   const memoizedRenderItem = useCallback(renderItem, []);
+
+  const filteredCategories = categories.filter(category =>
+    category.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const paginatedCategories = filteredCategories.slice(0, page * itemsPerPage);
+
+  const loadMore = () => {
+    if (paginatedCategories.length < filteredCategories.length) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -61,10 +75,12 @@ const SearchScreen = () => {
       />
       <View style={SearchStyles.categoryContainer}>
         <FlatList
-          data={categories}
+          data={filteredCategories}
           renderItem={memoizedRenderItem}
           keyExtractor={item => item.id.toString()}
           numColumns={2}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
         />
       </View>
     </KeyboardAvoidingView>
