@@ -23,7 +23,12 @@ const HomeScreen: React.FC = () => {
       });
 
       if (response.status === 200) {
-        console.log('Response:', response.data);
+        const movie = response.data[0][0];
+        setImage(movie.image_url);
+        setTitle(movie.title);
+        setDescription(movie.plot);
+        setRating(movie.imdb);
+        console.log('Movie:', movie);
       }
     } catch (error) {
       console.log('Error:', error);
