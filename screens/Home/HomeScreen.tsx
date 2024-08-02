@@ -15,6 +15,10 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modal';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+} from 'react-native-gesture-handler';
 
 const HomeScreen: React.FC = () => {
   const [image, setImage] = React.useState<string>('');
@@ -64,6 +68,13 @@ const HomeScreen: React.FC = () => {
     }
   };
 
+  const handleSwipe = (event: any) => {
+    const {translationX} = event.nativeEvent;
+    if (translationX < 50) {
+      getMovieDetails();
+    }
+  };
+
   React.useEffect(() => {
     getMovieDetails();
   }, []);
@@ -77,31 +88,35 @@ const HomeScreen: React.FC = () => {
         </Text>
       </View>
       <View style={HomeStyles.cardContainer}>
-        <View style={HomeStyles.card}>
-          <ImageBackground src={image} style={HomeStyles.imageBackground}>
-            <View style={HomeStyles.title}>
-              <Text style={HomeStyles.titleText}>{title}</Text>
+        <GestureHandlerRootView>
+          <PanGestureHandler onGestureEvent={handleSwipe}>
+            <View style={HomeStyles.card}>
+              <ImageBackground src={image} style={HomeStyles.imageBackground}>
+                <View style={HomeStyles.title}>
+                  <Text style={HomeStyles.titleText}>{title}</Text>
+                </View>
+                <LinearGradient
+                  colors={['transparent', 'rgba(0,0,0,0.9)']}
+                  style={HomeStyles.gradient}>
+                  <View style={HomeStyles.description}>
+                    <Text
+                      style={HomeStyles.descriptionText}
+                      onLayout={handleDescriptionLayout}
+                      numberOfLines={isOverflowed ? 3 : undefined}
+                      ref={descriptionRef}>
+                      Description: {description} <Text>Rating: {rating}</Text>
+                    </Text>
+                    {isOverflowed && (
+                      <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <Text style={HomeStyles.readMore}>Read More</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </LinearGradient>
+              </ImageBackground>
             </View>
-            <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.9)']}
-              style={HomeStyles.gradient}>
-              <View style={HomeStyles.description}>
-                <Text
-                  style={HomeStyles.descriptionText}
-                  onLayout={handleDescriptionLayout}
-                  numberOfLines={isOverflowed ? 3 : undefined}
-                  ref={descriptionRef}>
-                  Description: {description} <Text>Rating: {rating}</Text>
-                </Text>
-                {isOverflowed && (
-                  <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Text style={HomeStyles.readMore}>Read More</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-        </View>
+          </PanGestureHandler>
+        </GestureHandlerRootView>
         <View style={HomeStyles.cardOptions}>
           <TouchableOpacity
             style={{...HomeStyles.options, backgroundColor: 'orange'}}>
