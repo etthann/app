@@ -11,8 +11,8 @@ app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
 
 
 client = MongoClient('localhost', 27017)
+
 db = client.flask_database
-users = db.users
 
 @app.route("/")
 def index():
@@ -20,6 +20,18 @@ def index():
 
 @app.route('/register', methods=['POST'])
 def register():
+
+    # Check if the database exists
+    db_name = 'test'
+    if db_name not in client.list_database_names():
+        # Create the database by performing an operation
+        db = client[db_name]
+        db.create_collection('users')
+    else:
+        db = client[db_name]
+
+    users = db.users
+
     return auth.register_user(users)
 
 @app.route('/login', methods=['POST'])
@@ -38,7 +50,6 @@ def recommend():
     top_n = data['top_n']
     recommendations = recommend_movies(movie_id, top_n)
     return jsonify(recommendations, 200)
-
 
 
 if __name__ == "__main__":

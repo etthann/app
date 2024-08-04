@@ -1,0 +1,9 @@
+requests
+numpy
+flask
+pandas
+pymongo
+flask-cors
+python-dotenv
+bcrypt
+joblib

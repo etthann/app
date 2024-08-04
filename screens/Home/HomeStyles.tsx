@@ -51,7 +51,7 @@ const HomeStyles = StyleSheet.create({
   },
   card: {
     height: '85%',
-    width: '90%',
+    width: wp('90%'),
     backgroundColor: 'lightgray',
     borderRadius: hp('1%'),
     borderColor: 'black',
@@ -70,8 +70,8 @@ const HomeStyles = StyleSheet.create({
     alignItems: 'center',
   },
   options: {
-    height: hp('8.2%'),
-    width: '14.5%',
+    height: hp('7%'),
+    width: wp('14.5'),
     borderRadius: hp('10%'),
     justifyContent: 'center',
     alignItems: 'center',

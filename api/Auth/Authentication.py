@@ -11,12 +11,12 @@ class Authentication:
             username = data['username']
             password = data['password'].encode('utf-8')
             email = data['email']
-            confirm_password = data['confirmPassword']
+            confirm_password = data['confirmPassword'].encode('utf-8')
 
-            # Validate the request data
-            validation_message = Authentication.validate_request_data(users, username, password, email, confirm_password)
-            if validation_message is not None:
-                return validation_message
+            # # Validate the request data
+            # validation_message = Authentication.validate_request_data(users, username, password, email, confirm_password)
+            # if validation_message is not None:
+            #     return validation_message
 
             # Hash the password
             hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
