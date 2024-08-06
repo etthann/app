@@ -14,6 +14,9 @@ client = MongoClient('localhost', 27017)
 
 db = client.flask_database
 
+users = db.users
+
+
 @app.route("/")
 def index():
     return jsonify({'message': 'Hello World'})
@@ -29,8 +32,6 @@ def register():
         db.create_collection('users')
     else:
         db = client[db_name]
-
-    users = db.users
 
     return auth.register_user(users)
 

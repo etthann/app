@@ -5,6 +5,7 @@ import re
 import os
 import random
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
@@ -31,22 +32,38 @@ def get_movie_image(title):
             return data['Poster'], data['Plot'], data['Genre'], data['Director'], data['Actors'], data['imdbRating'], data['Year']
     return None, None, None, None, None, None, None
 
+logging.basicConfig(level=logging.DEBUG)
+
+
 def recommend_movies(movie_id=None, top_n=5):
     # Load the similarity matrix
-    similarity_matrix = joblib.load(os.path.join(os.path.dirname(__file__), 'similarity_matrix.pkl'))
+    try:
+        similarity_matrix = joblib.load(os.path.join(os.path.dirname(__file__), 'similarity_matrix.pkl'))
+        logging.debug("Similarity matrix loaded successfully.")
+    except Exception as e:
+        logging.error(f"Failed to load similarity matrix: {e}")
+        return []
 
     if movie_id is None:
         # Select a random movie_id if none is provided
         movie_id = random.choice(movies_df['movieId'].values)
+        logging.debug(f"Random movie_id selected: {movie_id}")
 
     # Get similarity scores for the given movie
-    similarity_scores = list(enumerate(similarity_matrix[movie_id - 1]))
+    try:
+        similarity_scores = list(enumerate(similarity_matrix[movie_id - 1]))
+        logging.debug(f"Similarity scores calculated for movie_id {movie_id}.")
+    except IndexError as e:
+        logging.error(f"Invalid movie_id {movie_id}: {e}")
+        return []
 
     # Sort movies by similarity score
     similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+    logging.debug(f"Similarity scores sorted for movie_id {movie_id}.")
 
     # Get top N similar movies (excluding the input movie itself)
     recommended_movie_ids = [i[0] + 1 for i in similarity_scores[1:top_n + 1]]
+    logging.debug(f"Top {top_n} recommended movie IDs: {recommended_movie_ids}")
 
     # Fetch recommended movie titles and images
     recommended_movies = []
@@ -54,7 +71,7 @@ def recommend_movies(movie_id=None, top_n=5):
         movie_row = movies_df.loc[movies_df['movieId'] == movie_id]
         if not movie_row.empty:
             title = movie_row['title'].values[0]
-            image_url, movie_plot, genre, director, actors, imdb, year  = get_movie_image(title)
+            image_url, movie_plot, genre, director, actors, imdb, year = get_movie_image(title)
             if (image_url is not None) and (movie_plot is not None):
                 recommended_movies.append({
                     'title': title,
@@ -65,12 +82,19 @@ def recommend_movies(movie_id=None, top_n=5):
                     'actors': actors,
                     'imdb': imdb,
                     'year': year
-                    })
+                })
+                logging.debug(f"Added movie: {title}")
+            else:
+                logging.warning(f"Missing data for movie: {title}")
+        else:
+            logging.warning(f"No movie found with movie_id: {movie_id}")
+
+    logging.debug(f"Total recommended movies: {len(recommended_movies)}")
     return recommended_movies
 
 if __name__ == "__main__":
     # Recommend movies at the start
-    recommendations = recommend_movies()
+    recommendations = recommend_movies(movie_id=1, top_n=5)
     for recommendation in recommendations:
         print(f"Title: {recommendation['title']}, "
                     f"Image URL: {recommendation['image_url']}, "
