@@ -18,11 +18,11 @@ interface Movie {
     handleDescriptionLayout: (event: any) => void;
     isOverflowed: any;
     descriptionRef: any;
-    setModalVisible: (event: any) => void;
-}
+    setModalVisible: (event: any) => void;}
 
 interface MovieCardProps {
     movies: Movie[];
+    getMovieDetails: () => Promise<void>;
 }
 
 const Card = ({ movie }: { movie: Movie }) => {
@@ -55,14 +55,16 @@ const Card = ({ movie }: { movie: Movie }) => {
     );
 };
 
-const MovieCard: React.FC<MovieCardProps> = ({ movies }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movies, getMovieDetails }) => {
     const [index, setIndex] = React.useState(0);
+
     return (
         <View style={styles.container}>
             <Swiper
                 cards={movies}
                 cardIndex={index}
                 renderCard={(movie) => <Card movie={movie} />}
+                onSwiped={() => getMovieDetails()}
             />
         </View>
     );

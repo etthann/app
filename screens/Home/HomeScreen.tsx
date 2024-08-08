@@ -16,11 +16,11 @@ import MovieCard from '../../components/MovieCard';
 const HomeScreen: React.FC = () => {
   const [movieData, setMovieData] = React.useState<any[]>([]);
 
-  const getMovieDetails = async () => {
+  const getMovieDetails = async (id?: number) => {
     try {
       if (movieData.length < 1) {
         const response = await axios.post('http://10.0.2.2:5000/recommend', {
-          movie_id: 1,
+          movie_id: id ? id : 1,
           top_n: 5,
         });
         setMovieData(response.data);
@@ -46,7 +46,7 @@ const HomeScreen: React.FC = () => {
         </Text>
       </View>
       <View style={HomeStyles.cardContainer}>
-        <MovieCard movies={movieData} />
+        <MovieCard movies={movieData} getMovieDetails={getMovieDetails}/>
         <View style={HomeStyles.cardOptions}>
           <TouchableOpacity
             style={{ ...HomeStyles.options, backgroundColor: 'orange' }}>
