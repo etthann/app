@@ -10,32 +10,17 @@ import HomeStyles from './HomeStyles';
 import AntDesign from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import axios from 'axios';
 import MovieCard from '../../components/MovieCard';
+import MovieDetails from '../../components/MovieDetails';
 
 const HomeScreen: React.FC = () => {
-  const [movieData, setMovieData] = React.useState<any[]>([]);
-
-  const getMovieDetails = async (id?: number) => {
-    try {
-      if (movieData.length < 1) {
-        const response = await axios.post('http://10.0.2.2:5000/recommend', {
-          movie_id: id ? id : 1,
-          top_n: 5,
-        });
-        setMovieData(response.data);
-      }
-    } catch (error) {
-      console.log('Error:', error);
-    }
-  };
+  const [movies, setMovies] = React.useState([]);
 
   React.useEffect(() => {
-    if (movieData.length < 1) {
-      getMovieDetails();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movieData.length]);
+    MovieDetails(1, 50).then((data) => {
+      setMovies(data);
+    });
+  }, []);
 
   return (
     <View style={HomeStyles.subContainer}>
@@ -46,7 +31,7 @@ const HomeScreen: React.FC = () => {
         </Text>
       </View>
       <View style={HomeStyles.cardContainer}>
-        <MovieCard movies={movieData} getMovieDetails={getMovieDetails}/>
+        <MovieCard movies={movies} />
         <View style={HomeStyles.cardOptions}>
           <TouchableOpacity
             style={{ ...HomeStyles.options, backgroundColor: 'orange' }}>

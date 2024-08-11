@@ -35,7 +35,7 @@ def get_movie_image(title):
 logging.basicConfig(level=logging.DEBUG)
 
 
-def recommend_movies(movie_id=None, top_n=5):
+def recommend_movies(movie_id=None, top_n=5, recommended_ids=[]):
     # Load the similarity matrix
     try:
         similarity_matrix = joblib.load(os.path.join(os.path.dirname(__file__), 'similarity_matrix.pkl'))
@@ -58,8 +58,8 @@ def recommend_movies(movie_id=None, top_n=5):
         return []
 
     # Sort movies by similarity score
-    similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
-    logging.debug(f"Similarity scores sorted for movie_id {movie_id}.")
+    recommended_movie_ids = [i[0] + 1 for i in similarity_scores[1:] if (i[0] + 1) not in recommended_ids][:top_n]
+    logging.debug(f"Top {top_n} recommended movie IDs: {recommended_movie_ids}")
 
     # Get top N similar movies (excluding the input movie itself)
     recommended_movie_ids = [i[0] + 1 for i in similarity_scores[1:top_n + 1]]
@@ -81,7 +81,8 @@ def recommend_movies(movie_id=None, top_n=5):
                     'director': director,
                     'actors': actors,
                     'imdb': imdb,
-                    'year': year
+                    'year': year,
+                    'id': movie_id
                 })
                 logging.debug(f"Added movie: {title}")
             else:
@@ -94,7 +95,7 @@ def recommend_movies(movie_id=None, top_n=5):
 
 if __name__ == "__main__":
     # Recommend movies at the start
-    recommendations = recommend_movies(movie_id=1, top_n=5)
+    recommendations = recommend_movies(movie_id=1, top_n=5, recommended_ids=[1, 2, 3])
     for recommendation in recommendations:
         print(f"Title: {recommendation['title']}, "
                     f"Image URL: {recommendation['image_url']}, "
@@ -103,4 +104,5 @@ if __name__ == "__main__":
                     f"Director: {recommendation['director']}, "
                     f"Actors: {recommendation['actors']}, "
                     f"IMDB Rating: {recommendation['imdb']}, "
-                    f"Year: {recommendation['year']}")
+                    f"Year: {recommendation['year']},"
+                    f"ID: {recommendation['id']}")

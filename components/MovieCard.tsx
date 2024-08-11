@@ -1,29 +1,33 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { ImageBackground, Text } from 'react-native';
+import { ActivityIndicator, ImageBackground, Text } from 'react-native';
 import { Image, StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import HomeStyles from '../screens/Home/HomeStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import { TouchableOpacity } from 'react-native';
+import MovieDetails from './MovieDetails';
 
 interface Movie {
     image_url: string;
     title: string;
     actors: string;
     genres: string;
-    description: string;
+    plot: string;
     imdb: string;
     handleDescriptionLayout: (event: any) => void;
     isOverflowed: any;
     descriptionRef: any;
-    setModalVisible: (event: any) => void;}
+    id: number;
+    setModalVisible: (event: any) => void;
+
+}
 
 interface MovieCardProps {
     movies: Movie[];
-    getMovieDetails: () => Promise<void>;
 }
+
 
 const Card = ({ movie }: { movie: Movie }) => {
     return (
@@ -41,7 +45,7 @@ const Card = ({ movie }: { movie: Movie }) => {
                             onLayout={movie?.handleDescriptionLayout}
                             numberOfLines={movie?.isOverflowed ? 3 : undefined}
                             ref={movie?.descriptionRef}>
-                            Description: {movie?.description} <Text>Rating: {movie?.imdb}</Text>
+                            Description: {movie?.plot} <Text>Rating: {movie?.imdb}</Text>
                         </Text>
                         {movie?.isOverflowed && (
                             <TouchableOpacity onPress={() => movie?.setModalVisible(true)}>
@@ -55,17 +59,48 @@ const Card = ({ movie }: { movie: Movie }) => {
     );
 };
 
-const MovieCard: React.FC<MovieCardProps> = ({ movies, getMovieDetails }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movies }) => {
     const [index, setIndex] = React.useState(0);
+    const [movieList, setMovieList] = React.useState(movies);
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    const handleSwiped = async (cardIndex: number) => {
+        const nextIndex = cardIndex + 1;
+        if (nextIndex >= movieList.length - 2) {
+            const recommendedIds = movieList.map(movie => movie.id);
+            MovieDetails(movieList[index].id, 5, recommendedIds).then((data) => {
+                setMovieList([]);
+                setIndex(0);
+                cardIndex = 0;
+                setMovieList((prevList) => [...prevList, ...data]);
+            });
+        } else {
+            setIndex(nextIndex);
+            console.log(movieList[nextIndex]);
+        }
+    };
+
+    React.useEffect(() => {
+        setMovieList(movies);
+    }, [movies]);
+
 
     return (
         <View style={styles.container}>
-            <Swiper
-                cards={movies}
-                cardIndex={index}
-                renderCard={(movie) => <Card movie={movie} />}
-                onSwiped={() => getMovieDetails()}
-            />
+            {movieList.length === 0 ? (
+                <>
+                    <Text>Loading...</Text>
+                    <ActivityIndicator size="large" />
+                </>
+
+            ) : (
+                <Swiper
+                    cards={movieList}
+                    cardIndex={index}
+                    renderCard={(movie) => <Card movie={movie} />}
+                    onSwiped={handleSwiped}
+                />
+            )}
         </View>
     );
 };
