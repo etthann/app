@@ -15,7 +15,7 @@ OMDB_BASE_URL = 'http://www.omdbapi.com/'
 # Load the movies DataFrame
 movies_df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'ml-latest-small/movies.csv'))
 
-def get_movie_image(title):
+def get_movie_data(title):
     match = re.search(r'\((\d{4})\)', title)
     year = match.group(1) if match else None
     title = re.sub(r'\s*\(\d{4}\)$', '', title)
@@ -71,7 +71,7 @@ def recommend_movies(movie_id=None, top_n=5, recommended_ids=[]):
         movie_row = movies_df.loc[movies_df['movieId'] == movie_id]
         if not movie_row.empty:
             title = movie_row['title'].values[0]
-            image_url, movie_plot, genre, director, actors, imdb, year = get_movie_image(title)
+            image_url, movie_plot, genre, director, actors, imdb, year = get_movie_data(title)
             if (image_url is not None) and (movie_plot is not None):
                 recommended_movies.append({
                     'title': title,

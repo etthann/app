@@ -3,19 +3,19 @@ from pymongo import MongoClient
 from flask_cors import CORS
 from Auth.Authentication import Authentication as auth
 import os
-from Recommendation.Recommend import recommend_movies 
+from Recommendation.Recommend import recommend_movies, get_movie_data
+from Services.FileServices import FileServices
+from Genres.Genre import MovieDatasetInfo
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
-
 
 client = MongoClient('localhost', 27017)
 
 db = client.flask_database
 
 users = db.users
-
 
 @app.route("/")
 def index():
@@ -52,6 +52,16 @@ def recommend():
     recommendations = recommend_movies(movie_id, top_n)
     return jsonify(recommendations, 200)
 
+@app.route("/genres", methods=["GET"])
+def getGenres():
+    file_services = FileServices()
+    data = file_services.readFile("./Recommendation/ml-latest-small/movies.csv")
+    genres = MovieDatasetInfo.get_genres(data)
+    movies = MovieDatasetInfo.get_movie_name(data)
+    img = get_movie_data(data)[0]
+    for i in range(len(genres)):
+        print(f'{'Movies:', {movies}}')
+        print(f'{'Images:',{img} }')
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

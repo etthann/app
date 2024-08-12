@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import * as React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import LoginStyles from './LoginStyles';
 import {
   Button,
@@ -14,15 +14,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {KeyboardAvoidingView} from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import axios from 'axios';
-import navProps from '../../props/navProp';
+import navProps from '../../props/interface';
 
-const Login: React.FC<navProps> = ({navigation}) => {
+const Login: React.FC<navProps> = ({ navigation }) => {
   const [userName, setUserName] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
   const [error, setError] = React.useState('');

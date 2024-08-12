@@ -2,13 +2,12 @@
 /* eslint-disable react/no-unstable-nested-components */
 
 import * as React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStyles from './HomeStyles';
 import AntDesign from 'react-native-vector-icons/FontAwesome';
 import Search from '../Search/Search';
 import Profile from '../Profile/Profile';
-import Favourites from '../Favourites/Favourites';
 import HomeScreen from './HomeScreen';
 
 const Tab = createBottomTabNavigator();
@@ -22,7 +21,7 @@ const Home: React.FC = () => {
           component={HomeScreen}
           options={{
             headerShown: false,
-            tabBarIcon: ({color, size}) => (
+            tabBarIcon: ({ color, size }) => (
               <AntDesign name="home" size={size} color={color} />
             ),
           }}
@@ -32,18 +31,8 @@ const Home: React.FC = () => {
           component={Search}
           options={{
             headerShown: false,
-            tabBarIcon: ({color, size}) => (
+            tabBarIcon: ({ color, size }) => (
               <AntDesign name="search" size={size} color={color} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Favorites"
-          component={Favourites}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({color, size}) => (
-              <AntDesign name="heart" size={size} color={color} />
             ),
           }}
         />
@@ -52,7 +41,7 @@ const Home: React.FC = () => {
           component={Profile}
           options={{
             headerShown: false,
-            tabBarIcon: ({color, size}) => (
+            tabBarIcon: ({ color, size }) => (
               <AntDesign name="user" size={size} color={color} />
             ),
           }}

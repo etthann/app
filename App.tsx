@@ -7,7 +7,6 @@ import Login from './screens/Login/Login';
 import Register from './screens/Register/Register';
 import Profile from './screens/Profile/Profile';
 import SearchScreen from './screens/Search/Search';
-import Favourites from './screens/Favourites/Favourites';
 import ForgotPassword from './screens/ForgotPassword/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
@@ -36,11 +35,6 @@ const App: React.FC = () => {
         <Stack.Screen
           name="Search"
           component={SearchScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Favourites"
-          component={Favourites}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

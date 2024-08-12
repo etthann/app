@@ -27,7 +27,8 @@ const HomeStyles = StyleSheet.create({
   },
   appName: {
     marginLeft: hp('1%'),
-    fontSize: hp('2.5%'),
+    fontSize: hp('4%'),
+    marginTop: hp('2%'),
     color: 'purple',
     fontWeight: 'bold',
     fontFamily: 'Roboto-Bold',

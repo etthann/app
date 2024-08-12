@@ -14,7 +14,7 @@ import {SearchBar} from '@rneui/themed';
 import SearchStyles from './SearchStyles';
 
 const categories = [
-  {id: 1, name: 'Dresses'},
+  {id: 1, name: 'Dresses' },
   {id: 2, name: 'Tops'},
   {id: 3, name: 'Pants'},
   {id: 4, name: 'Skirts'},

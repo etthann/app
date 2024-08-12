@@ -1,33 +1,16 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-native/no-inline-styles */
+
 import React from 'react';
 import { ActivityIndicator, ImageBackground, Text } from 'react-native';
-import { Image, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import HomeStyles from '../screens/Home/HomeStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import { TouchableOpacity } from 'react-native';
 import MovieDetails from './MovieDetails';
-
-interface Movie {
-    image_url: string;
-    title: string;
-    actors: string;
-    genres: string;
-    plot: string;
-    imdb: string;
-    handleDescriptionLayout: (event: any) => void;
-    isOverflowed: any;
-    descriptionRef: any;
-    id: number;
-    setModalVisible: (event: any) => void;
-
-}
-
-interface MovieCardProps {
-    movies: Movie[];
-}
-
+import { Movie } from '../props/interface';
+import { MovieCardProps } from '../props/interface';
 
 const Card = ({ movie }: { movie: Movie }) => {
     return (
@@ -62,22 +45,10 @@ const Card = ({ movie }: { movie: Movie }) => {
 const MovieCard: React.FC<MovieCardProps> = ({ movies }) => {
     const [index, setIndex] = React.useState(0);
     const [movieList, setMovieList] = React.useState(movies);
-    const [isLoading, setIsLoading] = React.useState(false);
 
-    const handleSwiped = async (cardIndex: number) => {
+    const handleSwiped = (cardIndex: number) => {
         const nextIndex = cardIndex + 1;
-        if (nextIndex >= movieList.length - 2) {
-            const recommendedIds = movieList.map(movie => movie.id);
-            MovieDetails(movieList[index].id, 5, recommendedIds).then((data) => {
-                setMovieList([]);
-                setIndex(0);
-                cardIndex = 0;
-                setMovieList((prevList) => [...prevList, ...data]);
-            });
-        } else {
-            setIndex(nextIndex);
-            console.log(movieList[nextIndex]);
-        }
+        setIndex(nextIndex);
     };
 
     React.useEffect(() => {
@@ -86,46 +57,31 @@ const MovieCard: React.FC<MovieCardProps> = ({ movies }) => {
 
 
     return (
-        <View style={styles.container}>
+        <View style={{ ...HomeStyles.subContainer, justifyContent: 'center' }}>
             {movieList.length === 0 ? (
                 <>
                     <Text>Loading...</Text>
-                    <ActivityIndicator size="large" />
+                    <ActivityIndicator size="large" color={'blue'} />
                 </>
-
             ) : (
                 <Swiper
                     cards={movieList}
                     cardIndex={index}
                     renderCard={(movie) => <Card movie={movie} />}
                     onSwiped={handleSwiped}
+                    stackAnimationTension={50}
+                    goBackToPreviousCardOnSwipeLeft
+                    backgroundColor={'#FFFFFF'}
+                    verticalSwipe={false}
+                    onSwipedAll={() => {
+                        MovieDetails(movies[index].id, 50).then((data) => {
+                            setMovieList(data);
+                        });
+                    }}
                 />
             )}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    card: {
-        borderRadius: 0,
-        shadowRadius: 25,
-        shadowColor: '#000',
-        shadowOpacity: 0.25,
-        shadowOffset: { width: 0, height: 2 },
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        alignItems: 'center',
-    },
-    cardImage: {
-        width: 300,
-        height: 400,
-    },
-});
 
 export default MovieCard;

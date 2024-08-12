@@ -11,18 +11,18 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as React from 'react';
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import RegisterStyles from './RegisterStyles';
-import navProps from '../../props/navProp';
+import navProps from '../../props/interface';
 import axios from 'axios';
 
-const Register: React.FC<navProps> = ({navigation}) => {
+const Register: React.FC<navProps> = ({ navigation }) => {
   const [userName, setUserName] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -83,7 +83,7 @@ const Register: React.FC<navProps> = ({navigation}) => {
     ];
 
     return !validations.find(
-      ({condition, message}) => condition && (setError(message), true),
+      ({ condition, message }) => condition && (setError(message), true),
     );
   };
 
