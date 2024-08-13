@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback} from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import React, { useCallback } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -9,30 +11,31 @@ import {
   Text,
   Platform,
 } from 'react-native';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {SearchBar} from '@rneui/themed';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { SearchBar } from '@rneui/themed';
 import SearchStyles from './SearchStyles';
+import axios from 'axios';
 
-const categories = [
-  {id: 1, name: 'Dresses' },
-  {id: 2, name: 'Tops'},
-  {id: 3, name: 'Pants'},
-  {id: 4, name: 'Skirts'},
-  {id: 5, name: 'Shoes'},
-  {id: 6, name: 'Accessories'},
-  {id: 7, name: 'Bags'},
-  {id: 8, name: 'Jewelry'},
-  {id: 9, name: 'Hats'},
-  {id: 10, name: 'Scarves'},
-];
-
-const renderItem = ({item}: {item: any}) => (
+const renderItem = ({ item }: { item: any }) => (
   <TouchableOpacity
     style={SearchStyles.categoryBox}
     onPress={() => console.log(`Navigate to ${item.name}`)}>
     <Text style={SearchStyles.categoryText}>{item.name}</Text>
   </TouchableOpacity>
 );
+
+const categories = [
+  { id: 1, name: 'Dresses' },
+  { id: 2, name: 'Tops' },
+  { id: 3, name: 'Pants' },
+  { id: 4, name: 'Skirts' },
+  { id: 5, name: 'Shoes' },
+  { id: 6, name: 'Accessories' },
+  { id: 7, name: 'Bags' },
+  { id: 8, name: 'Jewelry' },
+  { id: 9, name: 'Hats' },
+  { id: 10, name: 'Scarves' },
+];
 
 const SearchScreen = () => {
   const [search, setSearch] = React.useState('');
@@ -46,7 +49,7 @@ const SearchScreen = () => {
 
   const memoizedRenderItem = useCallback(renderItem, []);
 
-  const filteredCategories = categories.filter(category =>
+  const filteredCategories = categories.filter((category: { name: string; }) =>
     category.name.toLowerCase().includes(search.toLowerCase()),
   );
 
@@ -58,20 +61,39 @@ const SearchScreen = () => {
     }
   };
 
+  const getGenresAndMovies = async () => {
+    try {
+      const data = await axios.get('http:/10.0.2.2:5000/genres');
+      console.log(data.status);
+      if (data.status === 200) {
+        console.log(data.data);
+      }
+
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    getGenresAndMovies();
+  }
+  , []);
+
   return (
     <KeyboardAvoidingView
       behavior="height"
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : hp('4%')}
-      style={{flex: 1}}
+      style={{ flex: 1 }}
       enabled>
       <SearchBar
         placeholder="Type Here..."
         onChangeText={updateSearch}
         value={search}
         clearIcon={true}
-        loadingProps={{size: 'large', color: 'blue'}}
+        loadingProps={{ size: 'large', color: 'blue' }}
         placeholderTextColor="white"
-        inputStyle={{color: 'white'}}
+        inputStyle={{ color: 'white' }}
       />
       <View style={SearchStyles.categoryContainer}>
         <FlatList

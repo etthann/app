@@ -1,3 +1,6 @@
+import re
+
+
 class MovieDatasetInfo:
 
     def get_genres(data):
@@ -22,3 +25,18 @@ class MovieDatasetInfo:
                 all_movies.add(movie)
         return all_movies
     
+    def get_genre_movie_dict(data):
+        genre_movie_dict = {}
+        
+        for row in data:
+            movie_title = re.sub(r'\s\(\d{4}\)', '', row[1])
+            genre_list = row[2].split('|')
+            
+            for genre in genre_list:
+                if genre == "IMAX":
+                    continue
+                if genre not in genre_movie_dict:
+                    genre_movie_dict[genre] = []
+                
+                genre_movie_dict[genre].append(movie_title)
+        return genre_movie_dict

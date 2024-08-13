@@ -1,6 +1,7 @@
 from Genres.Genre import MovieDatasetInfo
 from Recommendation.Recommend import get_movie_data
 from Services.FileServices import FileServices
+import re
 
 file_services = FileServices()
 data = file_services.readFile("./Recommendation/ml-latest-small/movies.csv")
@@ -11,7 +12,7 @@ genres.remove('IMAX')
 genre_movie_dict = {}
 
 for row in data:
-    movie_title = row[1]
+    movie_title = re.sub(r'\s\(\d{4}\)', '', row[1])
     genre_list = row[2].split('|')
 
     for genre in genre_list:
@@ -19,6 +20,9 @@ for row in data:
             continue
         if genre not in genre_movie_dict:
             genre_movie_dict[genre] = []
+
         genre_movie_dict[genre].append(movie_title)
 
+
 print(genre_movie_dict.keys())
+print(genre_movie_dict['Adventure'][0:10])

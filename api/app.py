@@ -56,12 +56,8 @@ def recommend():
 def getGenres():
     file_services = FileServices()
     data = file_services.readFile("./Recommendation/ml-latest-small/movies.csv")
-    genres = MovieDatasetInfo.get_genres(data)
-    movies = MovieDatasetInfo.get_movie_name(data)
-    img = get_movie_data(data)[0]
-    for i in range(len(genres)):
-        print(f'{'Movies:', {movies}}')
-        print(f'{'Images:',{img} }')
+    genre_movie_dict = MovieDatasetInfo.get_genre_movie_dict(data)
+    return jsonify(genre_movie_dict, 200)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
