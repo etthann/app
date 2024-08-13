@@ -25,18 +25,27 @@ class MovieDatasetInfo:
                 all_movies.add(movie)
         return all_movies
     
-    def get_genre_movie_dict(data):
+    def get_genre_movie_dict(data, genre_filter=None, limit=None):
         genre_movie_dict = {}
-        
+        count = 0
+
         for row in data:
+            if limit and count >= limit:
+                break
             movie_title = re.sub(r'\s\(\d{4}\)', '', row[1])
             genre_list = row[2].split('|')
             
             for genre in genre_list:
                 if genre == "IMAX":
                     continue
+                if genre_filter and genre != genre_filter:
+                    continue
+
                 if genre not in genre_movie_dict:
                     genre_movie_dict[genre] = []
                 
                 genre_movie_dict[genre].append(movie_title)
+                count += 1
+                if limit and count >= limit:
+                    break
         return genre_movie_dict

@@ -4,8 +4,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import MovieCard from '../../components/MovieCard';
-import MovieDetails from '../../components/MovieDetails';
+import MovieCard from '../../components/MovieCard/MovieCard';
+import MovieDetails from '../../components/MovieCard/MovieDetails';
 import HomeStyles from './HomeStyles';
 
 const HomeScreen: React.FC = () => {

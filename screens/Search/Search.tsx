@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import React, { useCallback } from 'react';
 import {
@@ -15,39 +14,58 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SearchBar } from '@rneui/themed';
 import SearchStyles from './SearchStyles';
 import axios from 'axios';
+import { navProps } from '../../props/interface';
 
-const renderItem = ({ item }: { item: any }) => (
-  <TouchableOpacity
-    style={SearchStyles.categoryBox}
-    onPress={() => console.log(`Navigate to ${item.name}`)}>
-    <Text style={SearchStyles.categoryText}>{item.name}</Text>
-  </TouchableOpacity>
-);
 
-const categories = [
-  { id: 1, name: 'Dresses' },
-  { id: 2, name: 'Tops' },
-  { id: 3, name: 'Pants' },
-  { id: 4, name: 'Skirts' },
-  { id: 5, name: 'Shoes' },
-  { id: 6, name: 'Accessories' },
-  { id: 7, name: 'Bags' },
-  { id: 8, name: 'Jewelry' },
-  { id: 9, name: 'Hats' },
-  { id: 10, name: 'Scarves' },
-];
-
-const SearchScreen = () => {
+const SearchScreen: React.FC<navProps> = ({ navigation }) => {
   const [search, setSearch] = React.useState('');
   const [page, setPage] = React.useState(1);
+  const [categories, setCategories] = React.useState<Array<{ id: number; name: string; }>>([]);
+  const [movieData, setMovieData] = React.useState<[]>([]);
   const itemsPerPage = 5;
+
+  React.useEffect(() => {
+    getGenresAndMovies();
+  }
+    , []);
+
+  const getGenresAndMovies = async () => {
+    try {
+      const response = await axios.get('http://10.0.2.2:5000/genres');
+      if (response.status === 200) {
+        const fetchedGenres = response.data[0];
+        setMovieData(fetchedGenres);
+
+        const newCategories = Object.keys(fetchedGenres).map((genreValue, index) => ({
+          id: index,
+          name: genreValue,
+        }));
+
+        setCategories(newCategories);
+        console.log(newCategories);
+      } else {
+        console.error('Failed to fetch genres:', response.status);
+      }
+    } catch (error) {
+      console.error('Axios error:', error);
+    }
+  };
+
+  const renderItem = ({ item }: { item: any }) => (
+    <TouchableOpacity
+      style={SearchStyles.categoryBox}
+      onPress={() => navigation.navigate('Category', { title: item.name, moviesSortedByGenre: movieData })}>
+      <Text style={SearchStyles.categoryText}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
 
   const updateSearch = (searchCategory: React.SetStateAction<string>) => {
     setSearch(searchCategory);
     setPage(1);
   };
 
-  const memoizedRenderItem = useCallback(renderItem, []);
+  const memoizedRenderItem = useCallback(renderItem, [movieData, navigation]);
 
   const filteredCategories = categories.filter((category: { name: string; }) =>
     category.name.toLowerCase().includes(search.toLowerCase()),
@@ -61,24 +79,6 @@ const SearchScreen = () => {
     }
   };
 
-  const getGenresAndMovies = async () => {
-    try {
-      const data = await axios.get('http:/10.0.2.2:5000/genres');
-      console.log(data.status);
-      if (data.status === 200) {
-        console.log(data.data);
-      }
-
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  React.useEffect(() => {
-    getGenresAndMovies();
-  }
-  , []);
 
   return (
     <KeyboardAvoidingView

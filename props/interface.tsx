@@ -25,4 +25,6 @@ interface MovieCardProps {
   movies: Movie[];
 }
 
+
+
 export type { navProps, Movie, MovieCardProps };
