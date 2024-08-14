@@ -9,6 +9,7 @@ import {
   View,
   Text,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SearchBar } from '@rneui/themed';
@@ -96,14 +97,21 @@ const SearchScreen: React.FC<navProps> = ({ navigation }) => {
         inputStyle={{ color: 'white' }}
       />
       <View style={SearchStyles.categoryContainer}>
-        <FlatList
-          data={filteredCategories}
-          renderItem={memoizedRenderItem}
-          keyExtractor={item => item.id.toString()}
-          numColumns={2}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-        />
+
+        {
+          categories.length === 0 ? (
+            <ActivityIndicator />
+          ) :
+            <FlatList
+              data={filteredCategories}
+              renderItem={memoizedRenderItem}
+              keyExtractor={item => item.id.toString()}
+              numColumns={2}
+              onEndReached={loadMore}
+              onEndReachedThreshold={0.5}
+            />
+        }
+
       </View>
     </KeyboardAvoidingView>
   );

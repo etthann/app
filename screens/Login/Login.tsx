@@ -20,7 +20,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import axios from 'axios';
-import navProps from '../../props/interface';
+import { navProps } from '../../props/interface';
 
 const Login: React.FC<navProps> = ({ navigation }) => {
   const [userName, setUserName] = React.useState<string>('');
@@ -42,7 +42,6 @@ const Login: React.FC<navProps> = ({ navigation }) => {
         'Registration error:',
         (e as any).response ? (e as any).response.data : e,
       );
-      // Handle error (e.g., show error message to the user)
     }
   };
 
@@ -68,7 +67,7 @@ const Login: React.FC<navProps> = ({ navigation }) => {
             SHOP
           </Text>
 
-          <View style={LoginStyles.inputCOntainer}>
+          <View style={LoginStyles.inputContainer}>
             <TextInput
               style={LoginStyles.inputFieldContainer}
               onChangeText={username => {

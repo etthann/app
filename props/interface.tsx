@@ -2,6 +2,7 @@
 
 interface navProps {
   navigation: {
+    setOptions(arg0: { title: string; }): unknown;
     navigate: (routeName: string, params?: any) => void;
   };
 }

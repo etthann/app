@@ -41,7 +41,7 @@ const LoginStyles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
     backgroundColor: 'white',
   },
-  inputCOntainer: {
+  inputContainer: {
     fontWeight: 'bold',
     marginTop: hp('6%'),
     fontSize: hp('2%'),
