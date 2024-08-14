@@ -1,5 +1,5 @@
 import re
-
+from MovieData.FetchMovieData import get_movie_data
 
 class MovieDatasetInfo:
 
@@ -14,18 +14,8 @@ class MovieDatasetInfo:
             for genre in movieGenres:
                 all_genres.add(genre)
         return all_genres
-    
-    def get_movie_names(data):
-        all_movies = set()
 
-        for content in data:
-            movie_names = content[1].split('|')
-            
-            for movie in movie_names:
-                all_movies.add(movie)
-        return all_movies
-    
-    def get_genre_movie_dict(data, genre_filter=None, limit=None):
+    def map_genre_to_movie(data, genre_filter=None, limit=None):
         genre_movie_dict = {}
         count = 0
 
@@ -44,7 +34,9 @@ class MovieDatasetInfo:
                 if genre not in genre_movie_dict:
                     genre_movie_dict[genre] = []
                 
-                genre_movie_dict[genre].append(movie_title)
+                movie_poster = get_movie_data(movie_title)
+
+                genre_movie_dict[genre].append([movie_title, movie_poster[0]])
                 count += 1
                 if limit and count >= limit:
                     break

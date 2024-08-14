@@ -7,6 +7,7 @@ from Recommendation.Recommend import recommend_movies, get_movie_data
 from Services.FileServices import FileServices
 from Genres.Genre import MovieDatasetInfo
 
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
@@ -56,8 +57,10 @@ def recommend():
 def getGenres():
     file_services = FileServices()
     data = file_services.readFile("./Recommendation/ml-latest-small/movies.csv")
-    genre_movie_dict = MovieDatasetInfo.get_genre_movie_dict(data, limit=100)
+    genre_movie_dict = MovieDatasetInfo.map_genre_to_movie(data, limit=20)
     return jsonify(genre_movie_dict, 200)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

@@ -19,7 +19,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import RegisterStyles from './RegisterStyles';
-import navProps from '../../props/interface';
+import { navProps } from '../../props/interface';
 import axios from 'axios';
 
 const Register: React.FC<navProps> = ({ navigation }) => {
