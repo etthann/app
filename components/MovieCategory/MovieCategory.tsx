@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { Text, Image, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
