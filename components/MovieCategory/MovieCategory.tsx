@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MovieCategoryStyles from './MovieCategoryStyles';
 import { navProps } from '../../props/interface';
+import MovieDescriptionModal from '../MovieDescriptionModal';
 
 const MovieCategory: React.FC<navProps> = ({ navigation }) => {
 
@@ -31,17 +32,19 @@ const MovieCategory: React.FC<navProps> = ({ navigation }) => {
 
     }, [getMoviesByGenre, moviesSortedByGenre, navigation, title]);
 
-    console.log(movieData);
-
     return (
         <SafeAreaView style={MovieCategoryStyles.container}>
             <ScrollView>
 
                 {movieData && movieData.map((movie: any) => {
                     const imageUrl = movie[1];
-                    console.log(`Image URL for ${movie[0]}: ${imageUrl}`);
                     return (
-                        <TouchableOpacity key={movie[0]} style={MovieCategoryStyles.movieContainer}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                <MovieDescriptionModal />;
+                                console.log('Modal Pressed');
+                            }}
+                            key={movie[0]} style={MovieCategoryStyles.movieContainer}>
                             <Image
                                 source={{ uri: imageUrl }}
                                 style={MovieCategoryStyles.movieImage}
