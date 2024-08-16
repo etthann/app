@@ -5,12 +5,12 @@ import React from 'react';
 import { ActivityIndicator, ImageBackground, Text } from 'react-native';
 import { View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
-import HomeStyles from '../../screens/Home/HomeStyles';
+import HomeStyles from '../screens/Home/HomeStyles';
 import LinearGradient from 'react-native-linear-gradient';
 import { TouchableOpacity } from 'react-native';
-import MovieDetails from '../MovieCard/MovieDetails';
-import { Movie } from '../../props/interface';
-import { MovieCardProps } from '../../props/interface';
+import MovieDetails from './MovieDetails';
+import { Movie } from '../props/interface';
+import { MovieCardProps } from '../props/interface';
 
 const Card = ({ movie }: { movie: Movie }) => {
     return (
