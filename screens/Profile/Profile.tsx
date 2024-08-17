@@ -30,7 +30,7 @@ const Profile: React.FC<navProps> = ({ navigation }) => {
   const changePfp = () => {
 
 
-  }
+  };
 
   return (
     <SafeAreaView style={ProfileStyles.container}>
