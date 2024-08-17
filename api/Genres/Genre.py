@@ -34,9 +34,10 @@ class MovieDatasetInfo:
                 if genre not in genre_movie_dict:
                     genre_movie_dict[genre] = []
                 
-                movie_poster = get_movie_data(movie_title)
+                movie_data = get_movie_data(movie_title)
+                
 
-                genre_movie_dict[genre].append([movie_title, movie_poster[0]])
+                genre_movie_dict[genre].append([movie_title, movie_data[0],movie_data[1], movie_data[-2]])
                 count += 1
                 if limit and count >= limit:
                     break

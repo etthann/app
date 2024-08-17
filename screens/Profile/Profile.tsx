@@ -7,9 +7,12 @@ import React from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
-import navProps from '../../props/interface';
+import { navProps } from '../../props/interface';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+
 
 const Profile: React.FC<navProps> = ({ navigation }) => {
+
   const profileSections = [
     { name: 'Personal Info', icon: 'person' },
     { name: 'Shipping Address', icon: 'local-shipping' },
@@ -24,6 +27,11 @@ const Profile: React.FC<navProps> = ({ navigation }) => {
     }
   };
 
+  const changePfp = () => {
+
+
+  };
+
   return (
     <SafeAreaView style={ProfileStyles.container}>
       <View style={ProfileStyles.titleContainer}>
@@ -33,7 +41,7 @@ const Profile: React.FC<navProps> = ({ navigation }) => {
       </View>
       <TouchableOpacity
         style={ProfileStyles.avatarContainer}
-        onPress={() => { }}>
+        onPress={() => { changePfp }}>
         <Image
           source={{ uri: 'https://via.placeholder.com/150' }}
           style={ProfileStyles.avatar}
