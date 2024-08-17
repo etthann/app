@@ -27,8 +27,7 @@ const SearchScreen: React.FC<navProps> = ({ navigation }) => {
 
   React.useEffect(() => {
     getGenresAndMovies();
-  }
-    , []);
+  }, []);
 
   const getGenresAndMovies = async () => {
     try {
@@ -36,14 +35,13 @@ const SearchScreen: React.FC<navProps> = ({ navigation }) => {
       if (response.status === 200) {
         const fetchedGenres = response.data[0];
         setMovieData(fetchedGenres);
-
-        const newCategories = Object.keys(fetchedGenres).map((genreValue, index) => ({
+        const filteredGenres = Object.keys(fetchedGenres).filter(genre => genre !== 'genres');
+        const newCategories = filteredGenres.map((genreValue, index) => ({
           id: index,
           name: genreValue,
         }));
 
         setCategories(newCategories);
-        console.log(newCategories);
       } else {
         console.error('Failed to fetch genres:', response.status);
       }
