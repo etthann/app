@@ -21,6 +21,8 @@ import {
 import RegisterStyles from './RegisterStyles';
 import { navProps } from '../../props/interface';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Register: React.FC<navProps> = ({ navigation }) => {
   const [userName, setUserName] = React.useState('');

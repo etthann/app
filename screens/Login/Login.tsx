@@ -21,6 +21,8 @@ import {
 } from 'react-native-responsive-screen';
 import axios from 'axios';
 import { navProps } from '../../props/interface';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Login: React.FC<navProps> = ({ navigation }) => {
   const [userName, setUserName] = React.useState<string>('');
@@ -35,6 +37,7 @@ const Login: React.FC<navProps> = ({ navigation }) => {
       });
 
       if (response.status === 200) {
+        AsyncStorage.setItem('username', userName);
         navigation.navigate('Home');
       }
     } catch (e) {
