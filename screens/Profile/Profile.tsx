@@ -31,9 +31,6 @@ const Profile: React.FC<navProps> = ({ navigation }) => {
           setName(info.data?.username);
           setPfp(info.data[0]?.pfp);
 
-          console.log(info.data.username);
-
-
         } else {
           throw new Error("Couldn't Retrieve User Info");
         }
